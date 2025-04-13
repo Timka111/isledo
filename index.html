@@ -6,34 +6,38 @@
     <title>Билеты в стиле книги</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
             overflow-x: hidden;
+            color: #333;
         }
 
         .book-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            min-height: 100vh;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .book-cover {
-            background-color: #333;
+            background-color: #2c3e50;
             color: #fff;
             padding: 15px 20px;
             width: 100%;
             text-align: center;
             position: relative;
             flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .book-cover h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
         #menu-toggle {
@@ -47,19 +51,24 @@
             font-size: 24px;
             cursor: pointer;
             padding: 5px;
+            transition: transform 0.3s;
+        }
+
+        #menu-toggle:hover {
+            transform: translateY(-50%) scale(1.1);
         }
 
         .book-content {
             display: flex;
             width: 100%;
-            height: 100%;
+            flex: 1;
             position: relative;
             overflow: hidden;
         }
 
         .sidebar {
             width: 250px;
-            background-color: #444;
+            background-color: #34495e;
             color: #fff;
             position: absolute;
             top: 0;
@@ -79,23 +88,26 @@
 
         .sidebar ul li {
             margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .sidebar ul li a {
             display: block;
-            color: #fff;
+            color: #ecf0f1;
             text-decoration: none;
-            padding: 10px 20px;
-            transition: background-color 0.3s;
+            padding: 12px 20px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
         }
 
         .sidebar ul li a:hover {
-            background-color: #555;
+            background-color: #3d566e;
+            padding-left: 25px;
         }
 
         .content {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             background-color: #fff;
             overflow-y: auto;
             height: 100%;
@@ -114,10 +126,160 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 99;
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .overlay.active {
             display: block;
+            opacity: 1;
+        }
+
+        /* Стили для слайдера */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto 40px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 350px;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+
+        .slider-nav button {
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .slider-nav button:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: #2c3e50;
+        }
+
+        /* Стили для информационного блока */
+        .info-box {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .info-box::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+            z-index: 0;
+            border-radius: 15px;
+        }
+
+        .info-box h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .info-box p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #34495e;
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .welcome-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .welcome-text p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         @media (min-width: 768px) {
@@ -149,6 +311,41 @@
             .sidebar.active + .content {
                 overflow: hidden;
             }
+            
+            .slider-container {
+                height: 250px;
+            }
+            
+            .info-box {
+                padding: 20px;
+            }
+            
+            .welcome-text h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slider-container {
+                height: 200px;
+            }
+            
+            .slide-caption {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .info-box {
+                padding: 15px;
+            }
+            
+            .info-box h2 {
+                font-size: 1.4rem;
+            }
+            
+            .info-box p {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -156,7 +353,7 @@
     <div class="book-container">
         <div class="book-cover">
             <button id="menu-toggle">☰</button>
-            <h1>Билеты</h1>
+            <h1>Билеты по истории Беларуси</h1>
         </div>
         <div class="book-content">
             <div class="sidebar" id="sidebar">
@@ -189,8 +386,37 @@
                 </ul>
             </div>
             <div class="content">
-                <h2>Добро пожаловать!</h2>
-                <p>Выберите билет из меню слева, чтобы начать.</p>
+                <div class="welcome-text">
+                    <h2>Добро пожаловать в электронное пособие!</h2>
+                    <p>Здесь вы найдете все необходимые материалы для подготовки к экзамену</p>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider" id="slider">
+                        <div class="slide">
+                            <img src="image.png" alt="Беларусь">
+                            <div class="slide-caption">История Беларуси - богатое наследие</div>
+                        </div>
+                        <div class="slide">
+                            <img src="https://belkarta.by/upload/iblock/f53/bbpps5hcp589sceyqteka9xogznkopsx.jpg" alt="Учеба">
+                            <div class="slide-caption">Эффективная подготовка к экзаменам</div>
+                        </div>
+                        <div class="slide">
+                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Знания">
+                            <div class="slide-caption">Систематизированные материалы</div>
+                        </div>
+                    </div>
+                    <div class="slider-nav">
+                        <button id="prev-slide">❮</button>
+                        <button id="next-slide">❯</button>
+                    </div>
+                    <div class="slider-dots" id="slider-dots"></div>
+                </div>
+                
+                <div class="info-box">
+                    <h2>О проекте</h2>
+                    <p>Этот проект создан для выпускников 9-го класса с целью изучения билетов для обязательного экзамена по истории Беларуси. Здесь вы найдете полный набор материалов, которые помогут вам систематизировать знания и успешно подготовиться к испытанию.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -198,6 +424,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Меню
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
@@ -222,6 +449,91 @@
                     }
                 });
             });
+            
+            // Слайдер
+            const slider = document.getElementById('slider');
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-slide');
+            const nextBtn = document.getElementById('next-slide');
+            const dotsContainer = document.getElementById('slider-dots');
+            
+            let currentSlide = 0;
+            const slideCount = slides.length;
+            
+            // Создаем точки навигации
+            for (let i = 0; i < slideCount; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+            
+            const dots = document.querySelectorAll('.dot');
+            
+            // Функция перехода к слайду
+            function goToSlide(slideIndex) {
+                slider.style.transform = `translateX(-${slideIndex * 100}%)`;
+                currentSlide = slideIndex;
+                
+                // Обновляем активную точку
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            // Следующий слайд
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slideCount;
+                goToSlide(currentSlide);
+            }
+            
+            // Предыдущий слайд
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+                goToSlide(currentSlide);
+            }
+            
+            // Автопрокрутка
+            let slideInterval = setInterval(nextSlide, 5000);
+            
+            // Остановка автопрокрутки при наведении
+            slider.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+            });
+            
+            // Возобновление автопрокрутки
+            slider.addEventListener('mouseleave', () => {
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+            
+            // Кнопки навигации
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+            
+            // Адаптация высоты слайдов
+            function adjustSliderHeight() {
+                const sliderContainer = document.querySelector('.slider-container');
+                const aspectRatio = 16 / 9; // Соотношение сторон
+                const newHeight = sliderContainer.offsetWidth / aspectRatio;
+                sliderContainer.style.height = `${newHeight}px`;
+                document.querySelector('.slider').style.height = `${newHeight}px`;
+                document.querySelectorAll('.slide').forEach(slide => {
+                    slide.style.height = `${newHeight}px`;
+                });
+            }
+            
+            window.addEventListener('resize', adjustSliderHeight);
+            adjustSliderHeight();
         });
     </script>
 </body>
